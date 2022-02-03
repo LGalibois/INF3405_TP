@@ -1,3 +1,4 @@
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -16,11 +17,15 @@ public class ClientHandler extends Thread
 	
 	public void run()
 	{
+		
+		
 		try
 		{
+			DataInputStream in = new DataInputStream(socket.getInputStream());
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			
 			out.writeUTF("Hello from server - you are client #" + clientNumber);
+			
 		}
 		catch (IOException e)
 		{
