@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.BufferedWriter;
@@ -37,7 +38,9 @@ public class ChatRoom {
 	
 	private void initiateMessageHistory() {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(String.format(LOGS_FILE_NAME_FORMAT, name)));
+			File file = new File(String.format(LOGS_FILE_NAME_FORMAT, name));
+			file.createNewFile();
+			BufferedReader reader = new BufferedReader(new FileReader(file));
 			while (reader.ready())
 				updateMessageHistory(reader.readLine());
 			reader.close();

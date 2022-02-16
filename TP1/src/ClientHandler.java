@@ -1,10 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.List;
-
-import org.json.simple.parser.ParseException;
 
 import java.net.Socket;
 
@@ -88,19 +84,15 @@ public class ClientHandler extends Thread
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
 			
-			out.writeUTF("Hello from server - you are client #" + clientNumber);
-			
 			while (!socket.isClosed()) {
 				if (in.available() > 0) {
 					onMessageReceived(in.readUTF());
 				}
 			}
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
-			System.out.println("Error handling client# " + clientNumber + ": " + e);
-		} catch (ParseException e) {
-			System.out.println("Error parsing");
+			System.out.println("Error with ClientHandler");
 		}
 		finally
 		{
@@ -112,7 +104,6 @@ public class ClientHandler extends Thread
 			{
 				System.out.println("Could not close a socket, what's going on?");
 			}
-			System.out.println("Connection with client# " + clientNumber + " closed");
 		}
 	}
 }

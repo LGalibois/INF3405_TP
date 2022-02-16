@@ -1,17 +1,12 @@
-import java.io.DataOutputStream;
-import java.util.*;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class Server {
 	private static ServerSocket listener;
 	
 	public static void main(String[] args) throws Exception
 	{
-		int clientNumber = 0;
 		
 		ChatRoom chatRoom = new ChatRoom("Main Room");
 		
@@ -31,7 +26,6 @@ public class Server {
 			while (true)
 			{
 				ClientHandler newClient = new ClientHandler(listener.accept(), chatRoom);
-				clients.add(newClient);
 				newClient.start();
 			}
 		}
