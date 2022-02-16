@@ -13,7 +13,7 @@ public class Server {
 	{
 		int clientNumber = 0;
 		
-		List<ClientHandler> clients = new ArrayList<ClientHandler>();
+		ChatRoom chatRoom = new ChatRoom("Main Room");
 		
 		String serverAddress = "127.0.0.1";
 		int serverPort = 5000;
@@ -30,7 +30,7 @@ public class Server {
 		{
 			while (true)
 			{
-				ClientHandler newClient = new ClientHandler(listener.accept(), clients, clientNumber++);
+				ClientHandler newClient = new ClientHandler(listener.accept(), chatRoom);
 				clients.add(newClient);
 				newClient.start();
 			}

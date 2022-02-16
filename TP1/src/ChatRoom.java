@@ -30,6 +30,7 @@ public class ChatRoom {
 	
 	public void join(ClientHandler client) {
 		connectedClients.add(client);
+		client.sendMessage(String.format("[Server]: Welcome to chat room %s!", name));
 		for (String message: messageHistory)
 			client.sendMessage(message);
 	}
