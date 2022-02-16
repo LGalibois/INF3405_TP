@@ -10,7 +10,9 @@ import java.net.Socket;
 
 public class ClientHandler extends Thread 
 {
-	int MAX_MESSAGE_LENGTH = 200;
+	final int MAX_MESSAGE_LENGTH = 200;
+	final String REGISTRATION_GRANTED_MESSAGE = "registration granted";
+	final String REGISTRATION_DENIED_MESSAGE = "registration denied";
 	
 	private Socket socket;
 	private DataOutputStream out;
@@ -34,30 +36,35 @@ public class ClientHandler extends Thread
 		return Integer.toString(socket.getPort());
 	}
 	
+	public Boolean isRegistered() {
+		return username != null;
+	}
+	
 	private void onMessageReceived(String message) {
-		if (username != null) {
+		if (isRegistered())
 			chatRoom.sendMessage(this, message);
+		else
+			Register(message);
+	}
+	
+	private void Register(String message) {
+		try {
+			String[] args = message.split(" ");
+			String username = args[0];
+			String password = CredentialsManager.getInstance().getPassword(username);
+			if (password == null) {
+				CredentialsManager.getInstance().addCredentials(username, args[1]);
+			}
+			if (password != args[1]) {
+				sendMessage(REGISTRATION_DENIED_MESSAGE);
+				return;
+			}
+			sendMessage(REGISTRATION_GRANTED_MESSAGE);
+			this.username = username;
+			chatRoom.join(this);
 		}
-		else {
-			try {
-				String[] args = message.split(" ");
-				if (args.length != 2) return;
-				if (!(args[0] instanceof String) || !(args[1] instanceof String)) return;
-				String username = args[0];
-				String password = CredentialsManager.getInstance().getPassword(username);
-				if (password == null) {
-					CredentialsManager.getInstance().addCredentials(username, args[1]);
-				}
-				if (password != args[1]) {
-					sendMessage("denied");
-				}
-				sendMessage("granted");
-				this.username = username;
-				chatRoom.join(this);
-			}
-			catch (Exception e) {
-				System.out.println("Error treating message for " + (username != null ? username : "unregistered client"));
-			}
+		catch (Exception e) {
+			System.out.println("Error while trying to register client");
 		}
 	}
 	
