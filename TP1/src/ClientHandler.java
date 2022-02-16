@@ -67,7 +67,7 @@ public class ClientHandler extends Thread
 	public void sendMessage(String message) {
 		if (out != null) {
 			try {
-				out.writeUTF(new String(message));
+				out.writeUTF(message);
 			}
 			catch (IOException e) {
 				System.out.println("Could not send message");
