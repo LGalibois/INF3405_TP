@@ -9,6 +9,7 @@ import java.net.InetAddress;
 
 public class Client {
 	private static Socket socket;
+	private static DataOutputStream out;
 	
 	public static void main(String[] args) throws Exception
 	{
@@ -28,11 +29,11 @@ public class Client {
 		
 		InetAddress ip = InetAddress.getLocalHost();
 		
-		socket= new Socket(serverAddress, serverPort);
+		socket = new Socket(serverAddress, serverPort);
 		
 		// Creation d'un canal entrant pour recevoir les message envoyes par le serveur
-		DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-		
+		out = new DataOutputStream(socket.getOutputStream());
+		out.writeUTF(username + " " + password);
 		
 		//Fermeture de la connexion avec le serveur
 

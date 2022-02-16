@@ -7,10 +7,20 @@ public  class InputValidator {
 	static final int MAXIMUM_PORT = 5050;
 	static final int MAXIMUM_MESSAGE_SIZE = 200;
 	
+	/**
+	 * Cette fonction valide si le message est plus petit que la constante MAXIMUM_MESSAGE_SIZE
+	 * @param message : le message a validee
+	 * @return retourne vrai si le message est plus petit que la constante
+	 */
 	public static boolean isMessageValid(String message) {	
 		return message.length() <= MAXIMUM_MESSAGE_SIZE;
 	}
 	
+	/**
+	 * Le fonction valide que l'adresse ip passer est bien des chiffres entre 0 et 128
+	 * @param serverAddress : l'adresse ip a validee
+	 * @return retourne vrai si l'adresse est validee
+	 */
 	private static boolean validateServerAddress(String serverAddress)
 	{
 		boolean result = false;
@@ -23,7 +33,7 @@ public  class InputValidator {
 				for (int i = 0; i < NUMBER_OF_SEGMENT; i++)
 				{
 					int segment = Integer.parseInt(serverAddressSegment[i]);
-					result = result && segment >= 0 && segment <= 128;
+					result = result && segment >= 0 && segment <= 256;
 				}
 			}
 			catch(NumberFormatException exception)
@@ -36,6 +46,11 @@ public  class InputValidator {
 		return result;
 	}
 	
+	/**
+	 * La fonction retourne un port valide
+	 * @param consoleReader
+	 * @return
+	 */
 	public static String getValidAddress(Scanner consoleReader) 
 	{
 		String serverAddress;
