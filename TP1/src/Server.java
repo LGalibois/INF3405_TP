@@ -1,4 +1,5 @@
 import java.io.DataOutputStream;
+import java.util.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -11,6 +12,8 @@ public class Server {
 	public static void main(String[] args) throws Exception
 	{
 		int clientNumber = 0;
+		
+		List<ClientHandler> clients = new ArrayList<ClientHandler>();
 		
 		String serverAddress = "127.0.0.1";
 		int serverPort = 5000;
@@ -27,7 +30,9 @@ public class Server {
 		{
 			while (true)
 			{
-				new ClientHandler(listener.accept(), clientNumber++).start();
+				ClientHandler newClient = new ClientHandler(listener.accept(), clients, clientNumber++);
+				clients.add(newClient);
+				newClient.start();
 			}
 		}
 		finally

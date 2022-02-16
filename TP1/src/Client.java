@@ -2,6 +2,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.net.Socket;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime; 
+import java.net.InetAddress;
 
 public class Client {
 	private static Socket socket;
@@ -13,6 +16,20 @@ public class Client {
 	static final int MINIMUM_PORT = 5000;
 	static final int MAXIMUM_PORT = 5050;
 	
+	
+	//public static String getValidMessage(BufferedReader Message) {
+		
+	//	if (Message.readLine().length() > 200 ) {
+		
+	//		System.out.println("Le message ne peux pas d�pacer 200 caract�res");
+		
+	//	}
+	//	else
+	//		System.out.println("Le message valid�");
+			
+	//		return Message.readLine();
+	//}
+	
 	public static void main(String[] args) throws Exception
 	{
 		String serverAddress;
@@ -23,6 +40,14 @@ public class Client {
 		serverPort = getValidPort(consoleReader);
 		
 		System.out.println(serverAddress + " " + serverPort);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		
+		InetAddress ip = InetAddress.getLocalHost();
+		
+		System.out.println(serverAddress + " " + port + " " +  dtf.format(now) + " " + ip.getHostAddress());
+		
+
 		
 		// Creation d'une nouvelle connexion avec le serveur
 		//socket= new Socket(serverAddress, port);
