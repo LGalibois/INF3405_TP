@@ -34,6 +34,13 @@ public class CredentialsManager {
 		credentials.put("username", username);
 		credentials.put("password", password);
 		this.credentialsArray.add(credentials);
+		try {
+			FileWriter writer = new FileWriter(JSON_PATH);
+			writer.write(credentialsArray.toJSONString());
+		}
+		catch(IOException e) {
+			System.out.println("Error writing credentials for " + username);
+		}
 		
 	}
 	
