@@ -50,11 +50,8 @@ public class Client {
 		
 		do 
 		{
-			System.out.println("Entrez votre username: ");
-			String username = consoleReader.nextLine();
-			
-			System.out.println("Entrez votre mot de passe :");
-			String password = consoleReader.nextLine();
+			String username = InputValidator.getValidUsername(consoleReader);
+			String password = InputValidator.getValidPassword(consoleReader);
 			
 			try {
 				out.writeUTF(String.format("%s %s", username, password));

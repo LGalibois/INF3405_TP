@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.BufferedReader;
 
 public class ChatRoom {
+	final int MAX_MESSAGE_LENGTH = 200;
 	final int CHAT_HISTORY_CAPACITY = 15;
 	final String LOGS_FILE_NAME_FORMAT = "%s-chat-logs";
 	final String MESSAGE_FORMAT = "[%s - %s:%s - %s]: %s";
@@ -77,7 +78,7 @@ public class ChatRoom {
 	}
 	
 	public void sendMessage(ClientHandler senderClient, String message) {
-		if (!connectedClients.contains(senderClient)) return;
+		if (!connectedClients.contains(senderClient) || message.length() > MAX_MESSAGE_LENGTH) return;
 		message = formatMessage(senderClient, message);
 		for (ClientHandler client : connectedClients) {
 			if (client != senderClient) {

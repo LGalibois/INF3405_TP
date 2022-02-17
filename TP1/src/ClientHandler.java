@@ -46,8 +46,10 @@ public class ClientHandler extends Thread
 	private void Register(String message) {
 		try {
 			String[] args = message.split(" ");
+			System.out.println("Registering " + args[0] + " : " + args[1]);
 			String username = args[0];
 			String password = CredentialsManager.getInstance().getPassword(username);
+			System.out.println("password is: " + password);
 			if (password == null) {
 				CredentialsManager.getInstance().addCredentials(username, args[1]);
 			}
@@ -60,7 +62,7 @@ public class ClientHandler extends Thread
 			chatRoom.join(this);
 		}
 		catch (Exception e) {
-			System.out.println("Error while trying to register client");
+			System.out.println("Error while trying to register client: " + e.getMessage());
 		}
 	}
 	

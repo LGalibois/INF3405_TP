@@ -64,6 +64,24 @@ public  class InputValidator {
 		return serverAddress;
 	}
 	
+	public static String getValidUsername(Scanner consoleReader) {
+		String username;
+		do {
+			System.out.println("Entrez votre nom d'utilisateur :");
+			username = consoleReader.nextLine();
+		} while(username == null || username == "");
+		return username;
+	}
+	
+	public static String getValidPassword(Scanner consoleReader) {
+		String password;
+		do {
+			System.out.println("Entrez mot de passe :");
+			password = consoleReader.nextLine();
+		} while(password == null || password == "");
+		return password;
+	}
+	
 	public static int getValidPort(Scanner consoleReader)
 	{
 		boolean isValid = false;

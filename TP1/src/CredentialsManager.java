@@ -2,8 +2,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.lang.StringBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -19,7 +17,10 @@ public class CredentialsManager {
 	
 	private CredentialsManager() throws FileNotFoundException, IOException, ParseException {
 		JSONParser parser = new JSONParser();
-		this.credentialsArray = (JSONArray) parser.parse(new FileReader(JSON_PATH));
+		File file = new File(JSON_PATH);
+		file.createNewFile();
+		Object obj = parser.parse(new FileReader(file));
+		this.credentialsArray = obj != null ? (JSONArray) obj : new JSONArray();
 	}
 	
 	static public CredentialsManager getInstance() throws FileNotFoundException, IOException, ParseException {
@@ -46,6 +47,7 @@ public class CredentialsManager {
 	
 	public String getPassword(String username) {
 		for(Object obj: this.credentialsArray) {
+			System.out.println("obj is " + obj);
 			JSONObject credentials = (JSONObject) obj;
 			if (credentials.get("username") == username) {
 				return credentials.get("password").toString();
