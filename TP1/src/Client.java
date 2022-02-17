@@ -50,6 +50,7 @@ public class Client {
 		
 		do 
 		{
+			consoleReader.nextLine();
 			String username = InputValidator.getValidUsername(consoleReader);
 			String password = InputValidator.getValidPassword(consoleReader);
 			

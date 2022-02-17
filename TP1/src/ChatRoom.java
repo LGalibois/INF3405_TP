@@ -33,8 +33,10 @@ public class ChatRoom {
 	public void join(ClientHandler client) {
 		connectedClients.add(client);
 		client.sendMessage(String.format("[Server]: Welcome to chat room %s!", name));
-		for (String message: messageHistory)
+		for (String message: messageHistory) {
+			if (message == null) break;
 			client.sendMessage(message);
+		}
 	}
 	
 	private void initiateMessageHistory() {
@@ -78,7 +80,9 @@ public class ChatRoom {
 	}
 	
 	public void sendMessage(ClientHandler senderClient, String message) {
-		if (!connectedClients.contains(senderClient) || message.length() > MAX_MESSAGE_LENGTH) return;
+		if (message != null) return;
+		if (message.length() > MAX_MESSAGE_LENGTH) return;
+		if (!connectedClients.contains(senderClient)) return;
 		message = formatMessage(senderClient, message);
 		for (ClientHandler client : connectedClients) {
 			if (client != senderClient) {

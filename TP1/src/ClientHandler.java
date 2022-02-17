@@ -49,11 +49,12 @@ public class ClientHandler extends Thread
 			System.out.println("Registering " + args[0] + " : " + args[1]);
 			String username = args[0];
 			String password = CredentialsManager.getInstance().getPassword(username);
-			System.out.println("password is: " + password);
 			if (password == null) {
-				CredentialsManager.getInstance().addCredentials(username, args[1]);
+				password = args[1];
+				CredentialsManager.getInstance().addCredentials(username, password);
 			}
-			if (password != args[1]) {
+			System.out.println("password is " + password);
+			if (!password.equals(args[1])) {
 				sendMessage(REGISTRATION_DENIED_MESSAGE);
 				return;
 			}
@@ -67,7 +68,7 @@ public class ClientHandler extends Thread
 	}
 	
 	public void sendMessage(String message) {
-		if (out != null) {
+		if (out != null && message != null) {
 			try {
 				out.writeUTF(message);
 			}

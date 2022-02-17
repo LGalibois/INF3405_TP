@@ -18,9 +18,16 @@ public class CredentialsManager {
 	private CredentialsManager() throws FileNotFoundException, IOException, ParseException {
 		JSONParser parser = new JSONParser();
 		File file = new File(JSON_PATH);
-		file.createNewFile();
-		Object obj = parser.parse(new FileReader(file));
-		this.credentialsArray = obj != null ? (JSONArray) obj : new JSONArray();
+		if (!file.exists()) {
+			file.createNewFile();
+			this.credentialsArray = new JSONArray();
+			this.saveCredentials();
+		}
+		else {
+			Object obj = parser.parse(new FileReader(file));
+			this.credentialsArray = (JSONArray) obj;
+		}
+		
 	}
 	
 	static public CredentialsManager getInstance() throws FileNotFoundException, IOException, ParseException {
@@ -30,14 +37,19 @@ public class CredentialsManager {
 		return instance;
 	}
 	
+	private void saveCredentials() throws IOException {
+		FileWriter writer = new FileWriter(JSON_PATH);
+		writer.write(credentialsArray.toJSONString());
+		writer.close();
+	}
+	
 	public void addCredentials(String username, String password) {
 		JSONObject credentials = new JSONObject();
 		credentials.put("username", username);
 		credentials.put("password", password);
 		this.credentialsArray.add(credentials);
 		try {
-			FileWriter writer = new FileWriter(JSON_PATH);
-			writer.write(credentialsArray.toJSONString());
+			saveCredentials();
 		}
 		catch(IOException e) {
 			System.out.println("Error writing credentials for " + username);
@@ -47,9 +59,8 @@ public class CredentialsManager {
 	
 	public String getPassword(String username) {
 		for(Object obj: this.credentialsArray) {
-			System.out.println("obj is " + obj);
 			JSONObject credentials = (JSONObject) obj;
-			if (credentials.get("username") == username) {
+			if (credentials.get("username").equals(username)) {
 				return credentials.get("password").toString();
 			}
 		}
