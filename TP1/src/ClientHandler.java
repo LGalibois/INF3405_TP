@@ -37,8 +37,9 @@ public class ClientHandler extends Thread
 	}
 	
 	private void onMessageReceived(String message) {
-		if (isRegistered())
+		if (isRegistered()) {
 			chatRoom.sendMessage(this, message);
+		}
 		else
 			Register(message);
 	}

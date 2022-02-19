@@ -80,10 +80,11 @@ public class ChatRoom {
 	}
 	
 	public void sendMessage(ClientHandler senderClient, String message) {
-		if (message != null) return;
+		if (message == null) return;
 		if (message.length() > MAX_MESSAGE_LENGTH) return;
 		if (!connectedClients.contains(senderClient)) return;
 		message = formatMessage(senderClient, message);
+		System.out.println(message);
 		for (ClientHandler client : connectedClients) {
 			if (client != senderClient) {
 				client.sendMessage(message);

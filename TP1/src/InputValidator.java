@@ -33,7 +33,7 @@ public  class InputValidator {
 				for (int i = 0; i < NUMBER_OF_SEGMENT; i++)
 				{
 					int segment = Integer.parseInt(serverAddressSegment[i]);
-					result = result && segment >= 0 && segment <= 256;
+					result = i == 0 ? result && segment > 0 && segment <= 256 : result && segment >= 0 && segment <= 256;
 				}
 			}
 			catch(NumberFormatException exception)

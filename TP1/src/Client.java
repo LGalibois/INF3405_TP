@@ -11,6 +11,7 @@ import java.net.InetAddress;
 
 public class Client {
 	private final static String REGISTRATION_GRANTED_MESSAGE = "registration granted";
+	private final static String EXIT_MESSAGE = "exit";
 	
 	private static Socket socket;
 	private static DataOutputStream out;
@@ -38,7 +39,7 @@ public class Client {
 		String message;
 		do {
 			message = sendMessage();
-		} while (message !=  "exit");
+		} while (!message.equals(EXIT_MESSAGE));
 		
 		messageReceiver.stop();
 		socket.close();
@@ -62,7 +63,7 @@ public class Client {
 			{
 				System.out.println(exception.getMessage());
 			}	
-		}while(response != REGISTRATION_GRANTED_MESSAGE);
+		}while(!response.equals(REGISTRATION_GRANTED_MESSAGE));
 	}
 	
 	public static String sendMessage()  {
