@@ -47,9 +47,9 @@ public  class InputValidator {
 	}
 	
 	/**
-	 * La fonction retourne un port valide
-	 * @param consoleReader
-	 * @return
+	 * La fonction demande une adresse de serveur jusqu'à temps que l'adresse soit valide
+	 * @param consoleReader : le scanner qui est utilisé pour lire les entrées
+	 * @return l'adresse du serveur valide
 	 */
 	public static String getValidAddress(Scanner consoleReader) 
 	{
@@ -64,6 +64,11 @@ public  class InputValidator {
 		return serverAddress;
 	}
 	
+	/**
+	 * La fonction demande un nom d'utilisateur jusqu'à temps qu'il soit valide
+	 * @param consoleReader: le scanner qui est utilisé pour lire les entrées
+	 * @return le nom d'utilisateur valide
+	 */
 	public static String getValidUsername(Scanner consoleReader) {
 		String username;
 		do {
@@ -73,6 +78,11 @@ public  class InputValidator {
 		return username;
 	}
 	
+	/**
+	 * La fonction demande un mot de passe jusqu'à temps qu'il soit valide
+	 * @param consoleReader: le scanner qui est utilisé pour lire les entrées
+	 * @return le mot de passe valide
+	 */
 	public static String getValidPassword(Scanner consoleReader) {
 		String password;
 		do {
@@ -82,6 +92,11 @@ public  class InputValidator {
 		return password;
 	}
 	
+	/**
+	 * La fonction demande un port jusqu'à temps que le port soit valide
+	 * @param consoleReader: le scanner qui est utilisé pour lire les entrées
+	 * @return le port valide
+	 */
 	public static int getValidPort(Scanner consoleReader)
 	{
 		boolean isValid = false;

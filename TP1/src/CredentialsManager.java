@@ -30,6 +30,13 @@ public class CredentialsManager {
 		
 	}
 	
+	/**
+	 * La fonction retourne le singleton pour le CredentialsManager
+	 * @return le CredentialsManager
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	static public CredentialsManager getInstance() throws FileNotFoundException, IOException, ParseException {
 		if (instance == null) {
 			instance = new CredentialsManager();
@@ -37,12 +44,21 @@ public class CredentialsManager {
 		return instance;
 	}
 	
+	/**
+	 * La fonction sauvegarde les nom et les mots de passe des utilisateurs
+	 * @throws IOException
+	 */
 	private void saveCredentials() throws IOException {
 		FileWriter writer = new FileWriter(JSON_PATH);
 		writer.write(credentialsArray.toJSONString());
 		writer.close();
 	}
 	
+	/**
+	 * La fonction ajoute un mot de passe et un nom d'utilisateur
+	 * @param username: le nom d'utilisateur
+	 * @param password: le mot de passe d'utilisateur
+	 */
 	public void addCredentials(String username, String password) {
 		JSONObject credentials = new JSONObject();
 		credentials.put("username", username);
@@ -57,6 +73,11 @@ public class CredentialsManager {
 		
 	}
 	
+	/**
+	 * La fonction retourne un mot de passe pour un nom d'utilisateur
+	 * @param username: le nom de l'utilisateur
+	 * @return le mot de passe de l'utilisateur
+	 */
 	public String getPassword(String username) {
 		for(Object obj: this.credentialsArray) {
 			JSONObject credentials = (JSONObject) obj;

@@ -11,6 +11,9 @@ public class MessageReceiver extends Thread
 		this.socket = socket;
 	}
 	
+	/**
+	 * La fonction démare le thread
+	 */
 	public void run()
 	{
 		try
@@ -25,7 +28,7 @@ public class MessageReceiver extends Thread
 		}
 		catch (IOException e)
 		{
-			
+			System.out.println(e.getMessage());
 		}
 	}
 }

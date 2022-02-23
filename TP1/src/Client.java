@@ -37,6 +37,7 @@ public class Client {
 		messageReceiver.start();
 
 		String message;
+		System.out.println("Entrez votre message");
 		do {
 			message = sendMessage();
 		} while (!message.equals(EXIT_MESSAGE));
@@ -44,7 +45,10 @@ public class Client {
 		messageReceiver.stop();
 		socket.close();
 	}
-
+	
+	/**
+	 * La fonction demande le nom d'utilisateur et le mot de passe jusqu'à temps que le serveur lui retourne une réponse valide
+	 */
 	public static void connect()
 	{
 		String response = "";
@@ -66,10 +70,13 @@ public class Client {
 		}while(!response.equals(REGISTRATION_GRANTED_MESSAGE));
 	}
 	
+	/**
+	 * La fonction demande un message et l'envoie au serveur
+	 * @return le message envoyé au serveur
+	 */	
 	public static String sendMessage()  {
 		String message;
 		do {
-			System.out.println("Entrez votre message");
 			message = consoleReader.nextLine();
 		}
 		while(!InputValidator.isMessageValid(message)); 
@@ -77,13 +84,10 @@ public class Client {
 		try {
 			out.writeUTF(message);
 		}
-		
-				catch (Exception e) {
-					
-				}
-				
-		
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+						
 		return message;
-		
 	}
 }

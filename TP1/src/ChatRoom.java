@@ -30,6 +30,10 @@ public class ChatRoom {
 		this.initiateMessageHistory();
 	}
 	
+	/**
+	 * La fonction ajoute un thread clientHandler dans la salle de clavardage
+	 * @param client: le client à ajouter à la salle de clavardage
+	 */
 	public void join(ClientHandler client) {
 		connectedClients.add(client);
 		client.sendMessage(String.format("[Server]: Welcome to chat room %s!", name));
@@ -39,6 +43,9 @@ public class ChatRoom {
 		}
 	}
 	
+	/**
+	 * La fonction ouvre ou crée le fichier pour sauvegarder les messages
+	 */
 	private void initiateMessageHistory() {
 		try {
 			File file = new File(String.format(LOGS_FILE_NAME_FORMAT, name));
@@ -53,6 +60,10 @@ public class ChatRoom {
 		}
 	}
 	
+	/**
+	 * La fonction ajoute un message dans le tableau de message et le rajoute dans le fichier
+	 * @param message: le message à ajouter
+	 */
 	private void updateMessageHistory(String message) {
 		int i = 0;
 		for (; i < CHAT_HISTORY_CAPACITY - 1 && messageHistory[i] != null; i++)
@@ -69,6 +80,12 @@ public class ChatRoom {
 		}
 	}
 	
+	/**
+	 * La fonction ajoute le nom, l'ip, le port et la date au message
+	 * @param senderClient: le client qui a envoyer le message
+	 * @param message: le message envoyé
+	 * @return le message formatté
+	 */
 	private String formatMessage(ClientHandler senderClient, String message) {
 		return String.format(
 				MESSAGE_FORMAT,
@@ -79,6 +96,11 @@ public class ChatRoom {
 				message);
 	}
 	
+	/**
+	 * La fonction envoie un message à tous les clients dans la salle de clavardage
+	 * @param senderClient: le client qui a envoyer le message
+	 * @param message: le message à envoyer
+	 */
 	public void sendMessage(ClientHandler senderClient, String message) {
 		if (message == null) return;
 		if (message.length() > MAX_MESSAGE_LENGTH) return;

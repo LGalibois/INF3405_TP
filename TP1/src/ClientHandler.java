@@ -24,18 +24,34 @@ public class ClientHandler extends Thread
 		System.out.println("New connection with client" + this.getIp());
 	}
 	
+	/**
+	 * La fonction retourne l'ip du socket
+	 * @return l'ip du socket
+	 */
 	public String getIp() {
 		return socket.getInetAddress().toString();
 	}
 	
+	/**
+	 * La fonction retourne le port utilisé par le socket
+	 * @return le port du socket
+	 */
 	public String getPort() {
 		return Integer.toString(socket.getPort());
 	}
 	
+	/**
+	 * La fonction retourne si le client a été enregistré
+	 * @return si le client est enregistré
+	 */
 	public Boolean isRegistered() {
 		return username != null;
 	}
 	
+	/**
+	 * La fonction qui envoie le message à la salle de clavardage
+	 * @param message: le message à envoyer
+	 */
 	private void onMessageReceived(String message) {
 		if (isRegistered()) {
 			chatRoom.sendMessage(this, message);
@@ -44,6 +60,10 @@ public class ClientHandler extends Thread
 			Register(message);
 	}
 	
+	/**
+	 * La fonction enregistre un client avec un mot de passe et un nom d'utilisateur
+	 * @param message: le message qui contient le nom et le mot de passe de l'utilisateur
+	 */
 	private void Register(String message) {
 		try {
 			String[] args = message.split(" ");
@@ -68,6 +88,10 @@ public class ClientHandler extends Thread
 		}
 	}
 	
+	/**
+	 * La fonction envoie un message au client
+	 * @param message: le message à envoyer
+	 */
 	public void sendMessage(String message) {
 		if (out != null && message != null) {
 			try {
@@ -79,6 +103,9 @@ public class ClientHandler extends Thread
 		}
 	}
 	
+	/**
+	 * La fonction démare le thread
+	 */
 	public void run()
 	{
 		
