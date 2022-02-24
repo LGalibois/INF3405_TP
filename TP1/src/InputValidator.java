@@ -33,7 +33,7 @@ public  class InputValidator {
 				for (int i = 0; i < NUMBER_OF_SEGMENT; i++)
 				{
 					int segment = Integer.parseInt(serverAddressSegment[i]);
-					result = i == 0 ? result && segment > 0 && segment <= 256 : result && segment >= 0 && segment <= 256;
+					result = i == 0 ? result && segment > 0 && segment < 255 : result && segment >= 0 && segment < 255;
 				}
 			}
 			catch(NumberFormatException exception)
@@ -108,6 +108,7 @@ public  class InputValidator {
 			{	
 				System.out.println("Entrez le port du serveur :");
 				serverPort = consoleReader.nextInt();
+				consoleReader.nextLine();
 				
 				isValid = serverPort >= MINIMUM_PORT && serverPort <= MAXIMUM_PORT;
 			}

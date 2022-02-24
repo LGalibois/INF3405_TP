@@ -11,6 +11,7 @@ import java.net.InetAddress;
 
 public class Client {
 	private final static String REGISTRATION_GRANTED_MESSAGE = "registration granted";
+	private final static String REGISTRATION_DENIED_MESSAGE = "registration denied";
 	private final static String EXIT_MESSAGE = "exit";
 	
 	private static Socket socket;
@@ -37,12 +38,14 @@ public class Client {
 		messageReceiver.start();
 
 		String message;
-		System.out.println("Entrez votre message");
+		System.out.println("Entrez votre message:");
 		do {
 			message = sendMessage();
 		} while (!message.equals(EXIT_MESSAGE));
 		
 		messageReceiver.stop();
+		out.close();
+		in.close();
 		socket.close();
 	}
 	
@@ -55,13 +58,14 @@ public class Client {
 		
 		do 
 		{
-			consoleReader.nextLine();
 			String username = InputValidator.getValidUsername(consoleReader);
 			String password = InputValidator.getValidPassword(consoleReader);
 			
 			try {
 				out.writeUTF(String.format("%s %s", username, password));
 				response = in.readUTF();
+				if(response.equals(REGISTRATION_DENIED_MESSAGE))
+					System.out.println("Erreur dans la saisie du mot de passe");
 			}
 			catch(Exception exception)
 			{

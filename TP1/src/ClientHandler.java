@@ -9,6 +9,7 @@ public class ClientHandler extends Thread
 	final int MAX_MESSAGE_LENGTH = 200;
 	final String REGISTRATION_GRANTED_MESSAGE = "registration granted";
 	final String REGISTRATION_DENIED_MESSAGE = "registration denied";
+	final String CLOSING_MESSAGE = "exit";
 	
 	private Socket socket;
 	private DataOutputStream out;
@@ -51,13 +52,17 @@ public class ClientHandler extends Thread
 	/**
 	 * La fonction qui envoie le message à la salle de clavardage
 	 * @param message: le message à envoyer
+	 * @return si le message est le message pour fermé la connection
 	 */
-	private void onMessageReceived(String message) {
+	private boolean onMessageReceived(String message) {
+		if (message.equals(CLOSING_MESSAGE)) return true;
 		if (isRegistered()) {
 			chatRoom.sendMessage(this, message);
 		}
 		else
 			Register(message);
+		
+		return false;
 	}
 	
 	/**
@@ -107,17 +112,16 @@ public class ClientHandler extends Thread
 	 * La fonction démare le thread
 	 */
 	public void run()
-	{
-		
-		
+	{	
 		try
 		{
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
 			
-			while (!socket.isClosed()) {
+			boolean isClosed = false;
+			while (!isClosed) {
 				if (in.available() > 0) {
-					onMessageReceived(in.readUTF());
+					isClosed = onMessageReceived(in.readUTF());
 				}
 			}
 		}
@@ -129,6 +133,7 @@ public class ClientHandler extends Thread
 		{
 			try
 			{
+				chatRoom.leave(this);
 				socket.close();
 			}
 			catch (IOException e)

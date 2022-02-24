@@ -1,7 +1,13 @@
 import java.util.List;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Date;
+import java.util.Iterator;
 import java.text.SimpleDateFormat;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,13 +23,13 @@ public class ChatRoom {
 	final String DATE_FORMAT = "dd/MM/yyyy@HH:mm:ss";
 	
 	private List<ClientHandler> connectedClients;
-	private String[] messageHistory;
+	private LinkedList<String> messageHistory;
 	private SimpleDateFormat dateFormatter;
 	public String name;
 	
 	
 	public ChatRoom(String roomName) {
-		this.messageHistory = new String[CHAT_HISTORY_CAPACITY];
+		this.messageHistory = new LinkedList<String>();
 		this.connectedClients = new ArrayList<ClientHandler>();
 		this.dateFormatter = new SimpleDateFormat(DATE_FORMAT);
 		this.name = roomName;
@@ -37,10 +43,12 @@ public class ChatRoom {
 	public void join(ClientHandler client) {
 		connectedClients.add(client);
 		client.sendMessage(String.format("[Server]: Welcome to chat room %s!", name));
-		for (String message: messageHistory) {
-			if (message == null) break;
-			client.sendMessage(message);
+		
+		Iterator<String> message = messageHistory.descendingIterator();
+		while(message.hasNext()) {
+			client.sendMessage(message.next());
 		}
+
 	}
 	
 	/**
@@ -61,18 +69,23 @@ public class ChatRoom {
 	}
 	
 	/**
-	 * La fonction ajoute un message dans le tableau de message et le rajoute dans le fichier
+	 * La fonction ajoute un message dans le messageHistory
 	 * @param message: le message à ajouter
 	 */
 	private void updateMessageHistory(String message) {
-		int i = 0;
-		for (; i < CHAT_HISTORY_CAPACITY - 1 && messageHistory[i] != null; i++)
-			messageHistory[i] = messageHistory[i + 1];
-		messageHistory[i] = message;
-		
+		messageHistory.addFirst(message);
+		if (messageHistory.size() > CHAT_HISTORY_CAPACITY)
+			messageHistory.removeLast();
+	}
+	
+	/**
+	 * La fonction ajoute un message dans le fichier log
+	 * @param message: le message à ajouter
+	 */
+	private void updateMessageHistoryLog(String message) {	
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(String.format(LOGS_FILE_NAME_FORMAT, name)));
-			writer.append(message);
+			PrintWriter writer = new PrintWriter(new FileWriter(String.format(LOGS_FILE_NAME_FORMAT, name), true));
+			writer.println(message);
 			writer.close();
 		}
 		catch (IOException e) {
@@ -97,6 +110,14 @@ public class ChatRoom {
 	}
 	
 	/**
+	 * La fonction enlève un client de la salle de clavardage
+	 * @param client: le client à retirer
+	 */
+	public void leave(ClientHandler client) {
+		connectedClients.remove(client);
+	}
+	
+	/**
 	 * La fonction envoie un message à tous les clients dans la salle de clavardage
 	 * @param senderClient: le client qui a envoyer le message
 	 * @param message: le message à envoyer
@@ -105,13 +126,16 @@ public class ChatRoom {
 		if (message == null) return;
 		if (message.length() > MAX_MESSAGE_LENGTH) return;
 		if (!connectedClients.contains(senderClient)) return;
+		
 		message = formatMessage(senderClient, message);
 		System.out.println(message);
+		
 		for (ClientHandler client : connectedClients) {
 			if (client != senderClient) {
 				client.sendMessage(message);
 			}
 		}
 		updateMessageHistory(message);
+		updateMessageHistoryLog(message);
 	}
 }
